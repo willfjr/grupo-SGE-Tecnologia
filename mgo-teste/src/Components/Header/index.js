@@ -4,7 +4,6 @@ import { goToCardsScreen, goToFormsScreen } from "../../routes/coordinator";
 
 const Header = () => {
   const history = useHistory();
-
   return (
     <>
       <div> Header </div>
