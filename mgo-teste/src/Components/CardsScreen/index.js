@@ -1,9 +1,11 @@
 import React from "react";
 
+import Card from "../CollapsibleCard";
+
 const CardsScreen = () => {
   return (
     <>
-      <div>I'm the cat's page with collapsible cards.</div>
+      <Card />
     </>
   );
 };
