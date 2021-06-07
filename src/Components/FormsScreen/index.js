@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import FirstForm from "./FirstForm/index";
+import SecondForm from "./SecondForm/index";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Stepper,
@@ -13,15 +14,25 @@ import {
 
 const useStyles = makeStyles({
   root: {
-    width: "50%",
-    margin: "6rem auto",
-    border: "1px solid #999",
+    display: "flex",
+    flexDirection: "column",
+    margin: "auto",
+    maxWidth: "50vw",
+    maxHeight: "90vh",
+    padding: "5%",
     "& .MuiStepIcon-root.MuiStepIcon-active": {
       color: "blue",
+      justifyContent: "center",
     },
     "& .MuiStepIcon-root.MuiStepIcon-completed": {
       color: "green",
     },
+  },
+  btnContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: "50px",
   },
 });
 
@@ -30,6 +41,9 @@ const FormsScreen = () => {
 
   const handleNextStep = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+  const handleBackStep = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
   function getSteps() {
@@ -41,9 +55,21 @@ const FormsScreen = () => {
   function getStepsContent(stepIndex) {
     switch (stepIndex) {
       case 0:
-        return <FirstForm />;
+        return (
+          <FirstForm
+            activeStep={activeStep}
+            steps={steps}
+            handleNextStep={handleNextStep}
+          />
+        );
       case 1:
-        return "Step  Two (Personal Information)";
+        return (
+          <SecondForm
+            activeStep={activeStep}
+            steps={steps}
+            handleNextStep={handleNextStep}
+          />
+        );
       case 2:
         return "Step Three (Checkout)";
       default:
@@ -54,24 +80,33 @@ const FormsScreen = () => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
-      <Stepper alternativeLabel activeStep={activeStep}>
-        {steps.map((label) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
-      {activeStep === steps.length ? (
-        "Tudo certo!"
-      ) : (
-        <>
-          {getStepsContent(activeStep)}
-          <Button onClick={handleNextStep}>
-            {activeStep === steps.length ? "Prontinho" : "Próximo Passo"}
+    <div>
+      <div className={classes.root}>
+        <Stepper
+          className={classes.stepper}
+          alternativeLabel
+          activeStep={activeStep}
+        >
+          {steps.map((label) => (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+        {activeStep === steps.length ? (
+          "Tudo certo!"
+        ) : (
+          <>{getStepsContent(activeStep)}</>
+        )}
+        <div className={classes.btnContainer}>
+          <Button onClick={handleBackStep}>
+            {activeStep !== steps.length ? "Voltar" : "Voltar"}
           </Button>
-        </>
-      )}
+          <Button onClick={handleNextStep}>
+            {activeStep === steps.length ? "Prontinho" : "Avançar"}
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
