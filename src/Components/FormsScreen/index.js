@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import FirstForm from "./FirstForm/index";
 import SecondForm from "./SecondForm/index";
+import ThirdForm from "./ThirdForm/index";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Stepper,
@@ -71,7 +72,13 @@ const FormsScreen = () => {
           />
         );
       case 2:
-        return "Step Three (Checkout)";
+        return (
+          <ThirdForm
+            activeStep={activeStep}
+            steps={steps}
+            handleNextStep={handleNextStep}
+          />
+        );
       default:
         return "Unknown Step";
     }
