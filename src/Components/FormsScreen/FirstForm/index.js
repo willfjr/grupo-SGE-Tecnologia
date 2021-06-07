@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import useForm from "../useForm";
 import IntTelInput from "react-intl-tel-input";
 import "react-intl-tel-input/dist/main.css";
 import { makeStyles } from "@material-ui/core/styles";
@@ -20,9 +21,12 @@ import VisibilityOff from "@material-ui/icons/VisibilityOff";
 const useStyles = makeStyles({
   mainContainer: {
     display: "flex",
+    flexDirection: "column",
     justifyContent: "center",
+    alignItems: "center",
     position: "relative",
     zIndex: "5",
+    width: "100%",
   },
   formContainer: {
     display: "block",
@@ -43,10 +47,64 @@ const useStyles = makeStyles({
     height: "3rem",
     background: "blue",
     color: "#fff",
+    "&:hover": {
+      background: "blue",
+      opacity: "0.7",
+      transition: "0.3s esase-in-out",
+    },
+  },
+  disabledBtn: {
+    width: "100%",
+    height: "3rem",
+    background: "rgb(0,0,0, 0.38)",
+    color: "#fff",
+  },
+  errorText: {
+    fontSize: "12px",
+    marginLeft: "5px",
+    marginBottom: "0",
+    color: "red",
+    fontWeight: "200",
   },
 });
 
-const FirstForm = () => {
+const FirstForm = ({ activeStep, steps, handleNextStep }) => {
+  // Define the State Schema
+  const stateSchema = {
+    email: { value: "", error: "" },
+    password: { value: "", error: "" },
+    confirmPassword: { value: "", error: "" },
+  };
+
+  const stateValidatorSchema = {
+    email: {
+      required: true,
+      validator: {
+        func: (value) =>
+          /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/.test(
+            value
+          ),
+        error: "Seu e-mail precisa ter o formato padrão de e-mail.",
+      },
+    },
+    password: {
+      required: true,
+      validator: {
+        func: (value) =>
+          /^(?=.*[A-Za-z])(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/.test(value),
+        error:
+          "Você precisará de no mínimo 6 caracteres e pelo menos um caracter especial (@,$,!,%,*,#,&)",
+      },
+    },
+  };
+
+  const { values, errors, dirty, handleOnChange } = useForm(
+    stateSchema,
+    stateValidatorSchema
+  );
+
+  const { email, password, confirmPassword } = values;
+
   const classes = useStyles();
   const [showPassword, setShowPassword] = useState({ showPassword: false });
   const [showConfirmPassword, setShowConfirmPassword] = useState({
@@ -64,34 +122,35 @@ const FirstForm = () => {
   };
 
   return (
-    <div classNameName={classes.mainContainer}>
+    <div className={classes.mainContainer}>
       <Typography variant="h5" style={{ color: "#999", textAlign: "center" }}>
         Cadastre-se
       </Typography>
       <div className={classes.formContainer}>
         <form className={classes.form}>
-          <TextField
-            className={classes.inputField}
-            label="Nome"
-            variant="outlined"
-          />
-
-          <TextField
-            className={classes.inputField}
-            label="Sobrenome"
-            variant="outlined"
-          />
-          <IntTelInput preferredCountries={["br"]} />
+          {/* <IntTelInput preferredCountries={["br"]} /> */}
 
           <TextField
             className={classes.inputField}
             label="E-mail"
             variant="outlined"
+            name="email"
+            value={email}
+            onChange={handleOnChange}
           />
+          {errors.email && dirty.email && (
+            <Typography className={classes.errorText}>
+              {errors.email}
+            </Typography>
+          )}
+
           <FormControl variant="outlined" className={classes.inputField}>
             <InputLabel>Senha</InputLabel>
             <OutlinedInput
               type={showPassword.showPassword ? "text" : "password"}
+              name="password"
+              value={password}
+              onChange={handleOnChange}
               labelWidth={50}
               endAdornment={
                 <InputAdornment position="end">
@@ -105,6 +164,11 @@ const FirstForm = () => {
                 </InputAdornment>
               }
             />
+            {errors.password && dirty.password && (
+              <Typography className={classes.errorText}>
+                {errors.password}
+              </Typography>
+            )}
           </FormControl>
           <FormControl variant="outlined" className={classes.inputField}>
             <InputLabel>Confirme sua Senha</InputLabel>
@@ -112,6 +176,9 @@ const FirstForm = () => {
               type={
                 showConfirmPassword.showConfirmPassword ? "text" : "password"
               }
+              name="confirmPassword"
+              value={confirmPassword}
+              onChange={handleOnChange}
               labelWidth={155}
               endAdornment={
                 <InputAdornment position="end">
@@ -128,10 +195,35 @@ const FirstForm = () => {
                 </InputAdornment>
               }
             />
+
+            {confirmPassword !== password ? (
+              <Typography className={classes.errorText}>
+                Ops! Sua senha está diferente.
+              </Typography>
+            ) : null}
           </FormControl>
-          <Button className={classes.btn} variant="contained" type="submit">
-            Enviar
-          </Button>
+          {!email ||
+          !password ||
+          !confirmPassword ||
+          confirmPassword !== password ? (
+            <Button
+              className={classes.disabledBtn}
+              disabled
+              variant="contained"
+              type="submit"
+            >
+              {activeStep === steps.length ? "Prontinho" : "Próximo Passo"}
+            </Button>
+          ) : (
+            <Button
+              className={classes.btn}
+              variant="contained"
+              onClick={handleNextStep}
+              type="submit"
+            >
+              {activeStep === steps.length ? "Prontinho" : "Próximo Passo"}
+            </Button>
+          )}
         </form>
       </div>
     </div>
