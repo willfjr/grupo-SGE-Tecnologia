@@ -17,7 +17,7 @@ const useStyles = makeStyles({
     margin: "6rem auto",
     border: "1px solid #999",
     "& .MuiStepIcon-root.MuiStepIcon-active": {
-      color: "red",
+      color: "blue",
     },
     "& .MuiStepIcon-root.MuiStepIcon-completed": {
       color: "green",
