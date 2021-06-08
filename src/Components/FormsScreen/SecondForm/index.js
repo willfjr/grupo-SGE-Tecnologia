@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import useForm from "../useForm";
 import IntTelInput from "react-intl-tel-input";
 import "react-intl-tel-input/dist/main.css";
@@ -33,10 +33,10 @@ const useStyles = makeStyles({
     width: "100%",
     marginTop: "1rem",
     height: "3rem",
-    background: "blue",
+    background: "#6101F5",
     color: "#fff",
     "&:hover": {
-      background: "blue",
+      background: "#B813C2",
       opacity: "0.7",
       transition: "0.3s esase-in-out",
     },

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Card from "../CollapsibleCard";
 import useRequestData from "../../Hooks/useRequestData";
+import { Container } from "../CollapsibleCard/styled";
 
 const CardsScreen = () => {
   const [datas] = useRequestData([], "https://cataas.com/api/cats");
@@ -26,7 +27,11 @@ const CardsScreen = () => {
     };
 
     const renderCards = tags.map((tag) => {
-      return <Card name={tag} key={tag} dataList={dataList(tag)} />;
+      return (
+        <Container>
+          <Card name={tag} key={tag} dataList={dataList(tag)} />
+        </Container>
+      );
     });
 
     return <>{renderCards}</>;

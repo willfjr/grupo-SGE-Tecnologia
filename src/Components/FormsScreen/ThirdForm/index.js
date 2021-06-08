@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import useForm from "../useForm";
-import IntTelInput from "react-intl-tel-input";
 import "react-intl-tel-input/dist/main.css";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Button, TextField } from "@material-ui/core";
@@ -32,7 +31,7 @@ const useStyles = makeStyles({
   btn: {
     width: "100%",
     height: "3rem",
-    background: "blue",
+    background: "#6101F5",
     color: "#fff",
     "&:hover": {
       background: "blue",
@@ -80,7 +79,7 @@ const ThirdForm = ({ activeStep, steps, handleNextStep }) => {
     number: {
       required: true,
       validator: {
-        func: (value) => /((?:[\d][\s]?){5}[\d])/.test(value),
+        func: (value) => /((?:[\d][\s]?){1  }[\d])/.test(value),
         error: "Insira o número de sua residência.",
       },
     },

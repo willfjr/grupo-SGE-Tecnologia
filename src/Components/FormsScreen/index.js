@@ -3,15 +3,7 @@ import FirstForm from "./FirstForm/index";
 import SecondForm from "./SecondForm/index";
 import ThirdForm from "./ThirdForm/index";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  Stepper,
-  Step,
-  Steplabel,
-  Typography,
-  Button,
-  StepLabel,
-  FormHelperText,
-} from "@material-ui/core";
+import { Stepper, Step, Button, StepLabel } from "@material-ui/core";
 
 const useStyles = makeStyles({
   root: {
@@ -22,11 +14,11 @@ const useStyles = makeStyles({
     maxHeight: "90vh",
     padding: "5%",
     "& .MuiStepIcon-root.MuiStepIcon-active": {
-      color: "blue",
+      color: "#6101F5",
       justifyContent: "center",
     },
     "& .MuiStepIcon-root.MuiStepIcon-completed": {
-      color: "green",
+      color: "#F6DD3E",
     },
   },
   btnContainer: {
@@ -34,6 +26,18 @@ const useStyles = makeStyles({
     flexDirection: "row",
     justifyContent: "center",
     gap: "50px",
+  },
+  btn: {
+    width: "100%",
+    marginTop: "1rem",
+    height: "3rem",
+    background: "#6101F5",
+    color: "#fff",
+    "&:hover": {
+      background: "#B813C2",
+      opacity: "0.7",
+      transition: "0.3s esase-in-out",
+    },
   },
 });
 
@@ -73,11 +77,13 @@ const FormsScreen = () => {
         );
       case 2:
         return (
-          <ThirdForm
-            activeStep={activeStep}
-            steps={steps}
-            handleNextStep={handleNextStep}
-          />
+          <>
+            <ThirdForm
+              activeStep={activeStep}
+              steps={steps}
+              handleNextStep={handleNextStep}
+            />
+          </>
         );
       default:
         return "Unknown Step";
@@ -100,19 +106,27 @@ const FormsScreen = () => {
             </Step>
           ))}
         </Stepper>
+        {activeStep === steps.length ? "" : <>{getStepsContent(activeStep)}</>}
+
         {activeStep === steps.length ? (
-          "Tudo certo!"
+          <div className={classes.btnContainer}>
+            <Button onClick={handleBackStep}>
+              {activeStep !== steps.length ? "Voltar" : "Voltar"}
+            </Button>
+            {/* <Button onClick={handleNextStep}>
+                    {activeStep === steps.length ? "" : "Avançar"}
+                  </Button> */}
+          </div>
         ) : (
-          <>{getStepsContent(activeStep)}</>
+          <div className={classes.btnContainer}>
+            <Button onClick={handleBackStep}>
+              {activeStep !== steps.length ? "Voltar" : ""}
+            </Button>
+            <Button onClick={handleNextStep}>
+              {activeStep === steps.length ? "" : "Avançar"}
+            </Button>
+          </div>
         )}
-        <div className={classes.btnContainer}>
-          <Button onClick={handleBackStep}>
-            {activeStep !== steps.length ? "Voltar" : "Voltar"}
-          </Button>
-          <Button onClick={handleNextStep}>
-            {activeStep === steps.length ? "Prontinho" : "Avançar"}
-          </Button>
-        </div>
       </div>
     </div>
   );
