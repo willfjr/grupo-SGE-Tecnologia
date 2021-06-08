@@ -13,7 +13,8 @@ https://github.com/willfjr/grupo-SGE-Tecnologia.git
 
 
 ### Deploy
-uncovered-string.surge.sh
+
+http://uncovered-string.surge.sh/
 
 ### Installing
 
