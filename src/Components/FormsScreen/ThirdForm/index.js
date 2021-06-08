@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
 import useForm from "../useForm";
-import IntTelInput from "react-intl-tel-input";
 import "react-intl-tel-input/dist/main.css";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Button, TextField } from "@material-ui/core";
@@ -31,19 +30,17 @@ const useStyles = makeStyles({
   },
   btn: {
     width: "100%",
-    marginTop: "1rem",
     height: "3rem",
     background: "#6101F5",
     color: "#fff",
     "&:hover": {
-      background: "#B813C2",
+      background: "blue",
       opacity: "0.7",
       transition: "0.3s esase-in-out",
     },
   },
   disabledBtn: {
     width: "100%",
-    marginTop: "1rem",
     height: "3rem",
     background: "rgb(0,0,0, 0.38)",
     color: "#fff",
@@ -57,41 +54,70 @@ const useStyles = makeStyles({
   },
 });
 
-const SecondForm = ({ activeStep, steps, handleNextStep }) => {
+const ThirdForm = ({ activeStep, steps, handleNextStep }) => {
   // Define the State Schema
   const stateSchema = {
-    firstname: { value: "", error: "" },
-    lastname: { value: "", error: "" },
-    birthday: { value: "", erro: "" },
+    street: { value: "", error: "" },
+    number: { value: "", error: "" },
+    complement: { value: "", error: "" },
+    neighborhood: { value: "", error: "" },
+    city: { value: "", erro: "" },
+    zipcode: { value: "", erro: "" },
   };
 
   const stateValidatorSchema = {
-    firstname: {
-      required: true,
-      validator: {
-        func: (value) =>
-          /^([A-Za-z][A-Za-z'-])+([A-Za-z][A-Za-z'-]+)*/.test(value),
-        error: "Seu nome precisa apresentar mais de um caracter",
-      },
-    },
-    lastname: {
+    street: {
       required: true,
       validator: {
         func: (value) =>
           /^([A-Za-z][A-Za-z'-])+([A-Za-z][A-Za-z'-])+([A-Za-z][A-Za-z'-])*/.test(
             value
           ),
-        error: "Seu sobrenome precisa conter mais de três caracteres",
+        error: "Sua rua precisa ter pelo menos três caracteres.",
       },
     },
-    birthday: {
-      required: false,
+    number: {
+      required: true,
+      validator: {
+        func: (value) => /((?:[\d][\s]?){1  }[\d])/.test(value),
+        error: "Insira o número de sua residência.",
+      },
+    },
+    complement: {
+      required: true,
       validator: {
         func: (value) =>
-          /^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/.test(
+          /^([A-Za-z][A-Za-z'-])+([A-Za-z][A-Za-z'-])+([A-Za-z][A-Za-z'-])*/.test(
             value
           ),
-        error: "Data de nascimento inválida.",
+        error: "Sua cidade precisa ter pelo menos três caracteres.",
+      },
+    },
+    neighborhood: {
+      required: true,
+      validator: {
+        func: (value) =>
+          /^([A-Za-z][A-Za-z'-])+([A-Za-z][A-Za-z'-])+([A-Za-z][A-Za-z'-])*/.test(
+            value
+          ),
+        error: "Seu bairro precisa conter mais de três caracteres.",
+      },
+    },
+    city: {
+      required: true,
+      validator: {
+        func: (value) =>
+          /^([A-Za-z][A-Za-z'-])+([A-Za-z][A-Za-z'-])+([A-Za-z][A-Za-z'-])*/.test(
+            value
+          ),
+        error: "Sua cidade precisa ter pelo menos três caracteres.",
+      },
+    },
+    zipcode: {
+      required: true,
+      validator: {
+        func: (value) => /^\d{5}-\d{3}$/.test(value),
+        error: "Cep inválido.",
       },
     },
   };
@@ -101,7 +127,7 @@ const SecondForm = ({ activeStep, steps, handleNextStep }) => {
     stateValidatorSchema
   );
 
-  const { firstname, lastname, birthday } = values;
+  const { street, number, complement, neighborhood, city, zipcode } = values;
 
   const classes = useStyles();
 
@@ -114,51 +140,83 @@ const SecondForm = ({ activeStep, steps, handleNextStep }) => {
         <form className={classes.form}>
           <TextField
             className={classes.inputField}
-            label="Nome"
+            label="Rua"
             variant="outlined"
-            name="firstname"
-            value={firstname}
+            name="street"
+            value={street}
             onChange={handleOnChange}
           />
-          {errors.firstname && dirty.firstname && (
+          {errors.street && dirty.streete && (
             <Typography className={classes.errorText}>
-              {errors.firstname}
+              {errors.street}
+            </Typography>
+          )}
+          <TextField
+            className={classes.inputField}
+            label="Número"
+            variant="outlined"
+            name="number"
+            value={number}
+            onChange={handleOnChange}
+          />
+          {errors.number && dirty.number && (
+            <Typography className={classes.errorText}>
+              {errors.number}
+            </Typography>
+          )}
+          <TextField
+            className={classes.inputField}
+            label="Complemento"
+            variant="outlined"
+            name="complement"
+            value={complement}
+            onChange={handleOnChange}
+          />
+          {errors.complement && dirty.complement && (
+            <Typography className={classes.errorText}>
+              {errors.complement}
+            </Typography>
+          )}
+          <TextField
+            className={classes.inputField}
+            label="Bairro"
+            variant="outlined"
+            name="neighborhood"
+            value={neighborhood}
+            onChange={handleOnChange}
+          />
+          {errors.neighborhood && dirty.neighborhood && (
+            <Typography className={classes.errorText}>
+              {errors.neighborhood}
             </Typography>
           )}
 
           <TextField
             className={classes.inputField}
-            label="Sobrenome"
+            label="Cidade"
             variant="outlined"
-            name="lastname"
-            value={lastname}
+            name="city"
+            value={city}
             onChange={handleOnChange}
           />
-          {errors.lastname && dirty.lastname && (
-            <Typography className={classes.errorText}>
-              {errors.lastname}
-            </Typography>
+          {errors.city && dirty.city && (
+            <Typography className={classes.errorText}>{errors.city}</Typography>
           )}
-
           <TextField
             className={classes.inputField}
-            label="Data de nascimento"
+            label="Cep"
             variant="outlined"
-            name="birthday"
-            value={birthday}
+            name="zipcode"
+            value={zipcode}
             onChange={handleOnChange}
           />
-          {errors.birthday && dirty.birthday && (
+          {errors.zipcode && dirty.zipcode && (
             <Typography className={classes.errorText}>
-              {errors.birthday}
+              {errors.zipcode}
             </Typography>
           )}
 
-          <IntTelInput
-            preferredCountries={["br"]}
-            className={classes.inputField}
-          />
-          {!firstname || !lastname ? (
+          {!street || !number || !neighborhood || !city ? (
             <Button
               className={classes.disabledBtn}
               disabled
@@ -183,4 +241,4 @@ const SecondForm = ({ activeStep, steps, handleNextStep }) => {
   );
 };
 
-export default SecondForm;
+export default ThirdForm;

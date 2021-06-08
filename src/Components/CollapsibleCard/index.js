@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Accordion } from "./styled";
+import { Accordion, Container } from "./styled";
 
 const Card = (props) => {
   const [isOpen, setIsOpen] = useState(false);
